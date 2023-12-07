@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+USER app
+WORKDIR /app/src
+
+FROM base AS build
+ARG BUILD_CONFIGURATION=debug
+WORKDIR /app/src
+COPY . .
+RUN dotnet restore "./asg.identity.csproj"
+RUN dotnet build "./asg-identity.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# FROM build AS dev
+#ENV DOTNET_URLS=http://+:5001
+# CMD ["dotnet", "watch", "run"]
