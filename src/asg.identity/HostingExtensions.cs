@@ -17,6 +17,8 @@ namespace asg.identity
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+            Log.Debug("Connection String: {connectionString}", connectionString);
+
             var isBuilder = builder.Services
                 .AddIdentityServer(options =>
                 {
@@ -33,7 +35,7 @@ namespace asg.identity
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                 })
                 // this is something you will want in production to reduce load on and requests to the DB
                 //.AddConfigurationStoreCache()
@@ -42,7 +44,7 @@ namespace asg.identity
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlite(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                 });
 
             builder.Services.AddAuthentication()

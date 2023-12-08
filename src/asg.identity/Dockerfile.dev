@@ -7,8 +7,8 @@ ARG BUILD_CONFIGURATION=debug
 WORKDIR /app/src
 COPY . .
 RUN dotnet restore "./asg.identity.csproj"
-RUN dotnet build "./asg.identity.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./asg.identity.csproj" -c $BUILD_CONFIGURATION -o /app/src/bin/Debug/net7.0
 
 FROM build AS dev
 ENV DOTNET_URLS=http://+:5001
-CMD ["dotnet", "watch", "run"]
+CMD ["dotnet", "watch", "run", "/seed"]
