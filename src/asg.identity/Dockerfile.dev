@@ -11,4 +11,5 @@ RUN dotnet build "./asg.identity.csproj" -c $BUILD_CONFIGURATION -o /app/src/bin
 
 FROM build AS dev
 ENV DOTNET_URLS=http://+:5001
-CMD ["dotnet", "watch", "run", "/seed"]
+RUN dotnet run /seed
+CMD ["dotnet", "watch", "run"]
