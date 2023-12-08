@@ -17,8 +17,6 @@ namespace asg.identity
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            Log.Debug("Connection String: {connectionString}", connectionString);
-
             var isBuilder = builder.Services
                 .AddIdentityServer(options =>
                 {

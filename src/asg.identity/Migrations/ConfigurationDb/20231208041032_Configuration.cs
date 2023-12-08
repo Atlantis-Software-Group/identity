@@ -1,31 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace asg.identity.Migrations.ConfigurationDb
 {
+    /// <inheritdoc />
     public partial class Configuration : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "ApiResources",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RequireResourceIndicator = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
+                    RequireResourceIndicator = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NonEditable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,19 +38,19 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiScopes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    Required = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Emphasize = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(type: "bit", nullable: false),
+                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NonEditable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,58 +61,58 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ClientId = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    ProtocolType = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    RequireClientSecret = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ClientName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    ClientUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    LogoUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    RequireConsent = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowRememberConsent = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RequirePkce = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowPlainTextPkce = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RequireRequestObject = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowAccessTokensViaBrowser = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RequireDPoP = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DPoPValidationMode = table.Column<int>(type: "INTEGER", nullable: false),
-                    DPoPClockSkew = table.Column<TimeSpan>(type: "TEXT", nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    FrontChannelLogoutSessionRequired = table.Column<bool>(type: "INTEGER", nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    BackChannelLogoutSessionRequired = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowOfflineAccess = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IdentityTokenLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    AccessTokenLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    AuthorizationCodeLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    ConsentLifetime = table.Column<int>(type: "INTEGER", nullable: true),
-                    AbsoluteRefreshTokenLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    SlidingRefreshTokenLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    RefreshTokenUsage = table.Column<int>(type: "INTEGER", nullable: false),
-                    UpdateAccessTokenClaimsOnRefresh = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RefreshTokenExpiration = table.Column<int>(type: "INTEGER", nullable: false),
-                    AccessTokenType = table.Column<int>(type: "INTEGER", nullable: false),
-                    EnableLocalLogin = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IncludeJwtId = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AlwaysSendClientClaims = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ClientClaimsPrefix = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    InitiateLoginUri = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    UserSsoLifetime = table.Column<int>(type: "INTEGER", nullable: true),
-                    UserCodeType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    DeviceCodeLifetime = table.Column<int>(type: "INTEGER", nullable: false),
-                    CibaLifetime = table.Column<int>(type: "INTEGER", nullable: true),
-                    PollingInterval = table.Column<int>(type: "INTEGER", nullable: true),
-                    CoordinateLifetimeWithUserSession = table.Column<bool>(type: "INTEGER", nullable: true),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    ClientId = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ProtocolType = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    RequireClientSecret = table.Column<bool>(type: "bit", nullable: false),
+                    ClientName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ClientUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    LogoUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    RequireConsent = table.Column<bool>(type: "bit", nullable: false),
+                    AllowRememberConsent = table.Column<bool>(type: "bit", nullable: false),
+                    AlwaysIncludeUserClaimsInIdToken = table.Column<bool>(type: "bit", nullable: false),
+                    RequirePkce = table.Column<bool>(type: "bit", nullable: false),
+                    AllowPlainTextPkce = table.Column<bool>(type: "bit", nullable: false),
+                    RequireRequestObject = table.Column<bool>(type: "bit", nullable: false),
+                    AllowAccessTokensViaBrowser = table.Column<bool>(type: "bit", nullable: false),
+                    RequireDPoP = table.Column<bool>(type: "bit", nullable: false),
+                    DPoPValidationMode = table.Column<int>(type: "int", nullable: false),
+                    DPoPClockSkew = table.Column<TimeSpan>(type: "time", nullable: false),
+                    FrontChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    FrontChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
+                    BackChannelLogoutUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    BackChannelLogoutSessionRequired = table.Column<bool>(type: "bit", nullable: false),
+                    AllowOfflineAccess = table.Column<bool>(type: "bit", nullable: false),
+                    IdentityTokenLifetime = table.Column<int>(type: "int", nullable: false),
+                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    AccessTokenLifetime = table.Column<int>(type: "int", nullable: false),
+                    AuthorizationCodeLifetime = table.Column<int>(type: "int", nullable: false),
+                    ConsentLifetime = table.Column<int>(type: "int", nullable: true),
+                    AbsoluteRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
+                    SlidingRefreshTokenLifetime = table.Column<int>(type: "int", nullable: false),
+                    RefreshTokenUsage = table.Column<int>(type: "int", nullable: false),
+                    UpdateAccessTokenClaimsOnRefresh = table.Column<bool>(type: "bit", nullable: false),
+                    RefreshTokenExpiration = table.Column<int>(type: "int", nullable: false),
+                    AccessTokenType = table.Column<int>(type: "int", nullable: false),
+                    EnableLocalLogin = table.Column<bool>(type: "bit", nullable: false),
+                    IncludeJwtId = table.Column<bool>(type: "bit", nullable: false),
+                    AlwaysSendClientClaims = table.Column<bool>(type: "bit", nullable: false),
+                    ClientClaimsPrefix = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    PairWiseSubjectSalt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    InitiateLoginUri = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    UserSsoLifetime = table.Column<int>(type: "int", nullable: true),
+                    UserCodeType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeviceCodeLifetime = table.Column<int>(type: "int", nullable: false),
+                    CibaLifetime = table.Column<int>(type: "int", nullable: true),
+                    PollingInterval = table.Column<int>(type: "int", nullable: true),
+                    CoordinateLifetimeWithUserSession = table.Column<bool>(type: "bit", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NonEditable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -121,17 +123,17 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "IdentityProviders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Scheme = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    Properties = table.Column<string>(type: "TEXT", nullable: true),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    LastAccessed = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Scheme = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Properties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastAccessed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NonEditable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,18 +144,18 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "IdentityResources",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Enabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    DisplayName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    Required = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Emphasize = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    NonEditable = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Enabled = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Required = table.Column<bool>(type: "bit", nullable: false),
+                    Emphasize = table.Column<bool>(type: "bit", nullable: false),
+                    ShowInDiscoveryDocument = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NonEditable = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -164,10 +166,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiResourceClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ApiResourceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -184,11 +186,11 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiResourceProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ApiResourceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Key = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,10 +207,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiResourceScopes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Scope = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    ApiResourceId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ApiResourceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,14 +227,14 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiResourceSecrets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ApiResourceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApiResourceId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,10 +251,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiScopeClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ScopeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScopeId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -269,11 +271,11 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ApiScopeProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ScopeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Key = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScopeId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -290,11 +292,11 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -311,10 +313,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientCorsOrigins",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Origin = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Origin = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -331,10 +333,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientGrantTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    GrantType = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GrantType = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -351,10 +353,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientIdPRestrictions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Provider = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Provider = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -371,10 +373,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientPostLogoutRedirectUris",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PostLogoutRedirectUri = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostLogoutRedirectUri = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -391,11 +393,11 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Key = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -412,10 +414,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientRedirectUris",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RedirectUri = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RedirectUri = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -432,10 +434,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientScopes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Scope = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Scope = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -452,14 +454,14 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "ClientSecrets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ClientId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 4000, nullable: false),
-                    Expiration = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -476,10 +478,10 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "IdentityResourceClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    IdentityResourceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Type = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdentityResourceId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,11 +498,11 @@ namespace asg.identity.Migrations.ConfigurationDb
                 name: "IdentityResourceProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    IdentityResourceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Key = table.Column<string>(type: "TEXT", maxLength: 250, nullable: false),
-                    Value = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdentityResourceId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -644,6 +646,7 @@ namespace asg.identity.Migrations.ConfigurationDb
                 unique: true);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
