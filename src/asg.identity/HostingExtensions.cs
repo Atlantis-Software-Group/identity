@@ -110,8 +110,8 @@ namespace asg.identity
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapRazorPages();
-                // .RequireAuthorization();
+            app.MapRazorPages()
+                .RequireAuthorization();
 
             return app;
         }
