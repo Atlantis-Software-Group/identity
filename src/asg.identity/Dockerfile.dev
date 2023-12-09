@@ -10,6 +10,6 @@ RUN dotnet restore "./asg.identity.csproj"
 RUN dotnet build "./asg.identity.csproj" -c $BUILD_CONFIGURATION -o /app/src/bin/Debug/net7.0
 
 FROM build AS dev
-ENV DOTNET_URLS=http://+:5001
+ENV DOTNET_URLS=https://+:5001
 WORKDIR /app/src
 ENTRYPOINT [ "/bin/sh", "-c", "./entrypoint.sh && dotnet watch run" ]

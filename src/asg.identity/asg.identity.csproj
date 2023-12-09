@@ -7,9 +7,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.10.2" />
+		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.6" />
 		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.3.6" />
 
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.14" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.14" />
 
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.0" />
 
