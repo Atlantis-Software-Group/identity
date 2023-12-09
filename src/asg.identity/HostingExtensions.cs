@@ -73,15 +73,15 @@ namespace asg.identity
             {
                 builder.Services.AddAuthorization(options =>
                     options.AddPolicy("admin",
-                        policy => policy.RequireClaim("sub", "1"))
+                        policy => policy.RequireClaim("email", "AliceSmith@email.com", "BobSmith@email.com"))
                 );
 
                 builder.Services.Configure<RazorPagesOptions>(options =>
                     options.Conventions.AuthorizeFolder("/Admin", "admin"));
 
                 builder.Services.AddTransient<asg.identity.Pages.Portal.ClientRepository>();
-                builder.Services.AddTransient<ClientRepository>();
-                builder.Services.AddTransient<IdentityScopeRepository>();
+            builder.Services.AddTransient<ClientRepository>();
+            builder.Services.AddTransient<IdentityScopeRepository>();
                 builder.Services.AddTransient<ApiScopeRepository>();
             }
 
@@ -105,6 +105,8 @@ namespace asg.identity
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHsts();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();
