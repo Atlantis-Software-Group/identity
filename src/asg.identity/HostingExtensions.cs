@@ -3,6 +3,7 @@ using asg.identity.Pages.Admin.ApiScopes;
 using asg.identity.Pages.Admin.Clients;
 using asg.identity.Pages.Admin.IdentityScopes;
 using Duende.IdentityServer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -17,6 +18,15 @@ namespace asg.identity
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+            builder.Services.AddDbContext<ApplicationDbContext>(options => 
+            {
+                options.UseSqlServer(connectionString);
+            });
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             var isBuilder = builder.Services
                 .AddIdentityServer(options =>
                 {
@@ -26,9 +36,9 @@ namespace asg.identity
                     options.Events.RaiseSuccessEvents = true;
 
                     // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
-                    options.EmitStaticAudienceClaim = true;
+                    options.EmitStaticAudienceClaim = false;
                 })
-                .AddTestUsers(TestUsers.Users)
+                //.AddTestUsers(TestUsers.Users)
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
@@ -43,7 +53,8 @@ namespace asg.identity
                 {
                     options.ConfigureDbContext = b =>
                         b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-                });
+                })
+                .AddAspNetIdentity<ApplicationUser>();
 
             builder.Services.AddAuthentication()
                 .AddGoogle(options =>
@@ -99,8 +110,8 @@ namespace asg.identity
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapRazorPages()
-                .RequireAuthorization();
+            app.MapRazorPages();
+                // .RequireAuthorization();
 
             return app;
         }
