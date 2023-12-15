@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Identity",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "processName": "dotnet",
+            "sourceFileMap": {
+                "/app/src": "src/asg.identity"
+            }
+        }
+    ]
+}
