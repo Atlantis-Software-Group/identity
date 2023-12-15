@@ -3,6 +3,7 @@ using asg.identity.Pages.Admin.ApiScopes;
 using asg.identity.Pages.Admin.Clients;
 using asg.identity.Pages.Admin.IdentityScopes;
 using Duende.IdentityServer;
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +55,8 @@ namespace asg.identity
                     options.ConfigureDbContext = b =>
                         b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                 })
-                .AddAspNetIdentity<ApplicationUser>();
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddProfileService<ASGIdentityProfileService>();
 
             builder.Services.AddAuthentication()
                 .AddGoogle(options =>
