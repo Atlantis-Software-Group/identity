@@ -9,6 +9,10 @@ namespace asg.identity
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResource("user", 
+                                    userClaims: new[] { "id"}
+                )
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -28,12 +32,12 @@ namespace asg.identity
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:44300/signin-oidc" },
-                    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
-                    PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
+                    RedirectUris = { "https://localhost:7112/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:7112/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:7112/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "simple-budget-api" }
+                    AllowedScopes = { "openid", "user", "profile", "simple-budget-api", "offline_access" }
                 },
             };
     }
