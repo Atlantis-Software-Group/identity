@@ -37,7 +37,7 @@ namespace asg.identity
                     PostLogoutRedirectUris = { "https://localhost:7112/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "user", "profile", "simple-budget-api", "offline_access" }
+                    AllowedScopes = { "openid", "email", "user", "profile", "simple-budget-api", "offline_access" }
                 },
             };
     }
