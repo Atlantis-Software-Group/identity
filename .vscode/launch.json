@@ -5,9 +5,9 @@
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
-            "processName": "dotnet",
+            "processName": "asg.identity",
             "sourceFileMap": {
-                "/app/src": "src/asg.identity"
+                "/app/src": "${workspaceFolder}/src/asg.identity"
             }
         }
     ]
