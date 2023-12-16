@@ -51,6 +51,7 @@ namespace asg.identity
                             new Claim(JwtClaimTypes.GivenName, "Alice"),
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
+                            new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
                             new Claim("id", Guid.NewGuid().ToString())
                         }).Result;
                 if (!result.Succeeded)
@@ -85,6 +86,7 @@ namespace asg.identity
                             new Claim(JwtClaimTypes.FamilyName, "Smith"),
                             new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
                             new Claim("location", "somewhere"),
+                            new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
                             new Claim("id", Guid.NewGuid().ToString())
                         }).Result;
                 if (!result.Succeeded)
