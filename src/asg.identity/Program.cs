@@ -13,7 +13,7 @@ try
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.Seq("http://seq:5341")
+        .WriteTo.Seq("https://seq:45341")
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(ctx.Configuration));
 

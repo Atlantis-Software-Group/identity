@@ -16,7 +16,7 @@ namespace asg.identity
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddRazorPages();
-
+            builder.Services.AddHealthChecks();
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
@@ -101,6 +101,7 @@ namespace asg.identity
 
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
+            app.MapHealthChecks("/health");            
             app.UseSerilogRequestLogging();
 
             if (app.Environment.IsDevelopment())
