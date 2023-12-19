@@ -27,7 +27,7 @@ namespace asg.identity
                 // interactive client using code flow + pkce
                 new Client
                 {
-                    ClientId = "backend-for-frontend",
+                    ClientId = "web-client",
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.Code,
@@ -36,6 +36,17 @@ namespace asg.identity
                     FrontChannelLogoutUri = "https://localhost:7112/signout-oidc",
                     PostLogoutRedirectUris = { "https://localhost:7112/signout-callback-oidc" },
 
+                    AllowOfflineAccess = true,
+                    AllowedScopes = { "openid", "email", "user", "profile", "simple-budget-api", "offline_access" }
+                },
+                new Client
+                {
+                    ClientId = "backend-for-frontend",
+                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = { "https://localhost:3101/signin-oidc" },
+                    FrontChannelLogoutUri = "https://localhost:3101/signout-oidc",
+                    PostLogoutRedirectUris = { "https://localhost:3101/signout-callback-oidc" },
                     AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "email", "user", "profile", "simple-budget-api", "offline_access" }
                 },
