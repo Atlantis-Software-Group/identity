@@ -38,7 +38,6 @@ namespace asg.identity
 
                     // see https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
                     options.EmitStaticAudienceClaim = false;
-                    options.IssuerUri = "https://identity:5001";
                 })
                 //.AddTestUsers(TestUsers.Users)
                 // this adds the config data from DB (clients, resources, CORS)
