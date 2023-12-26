@@ -1,5 +1,6 @@
 ﻿using asg.identity;
 using Serilog;
+using Serilog.Exceptions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -11,11 +12,23 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.Seq("https://seq:45341")
-        .Enrich.FromLogContext()
-        .ReadFrom.Configuration(ctx.Configuration));
+    builder.Host.UseSerilog((ctx, services, lc) => {
+            IConfiguration config = ctx.Configuration;
+            string seqUrl = config["Seq:ServerUrl"] ?? string.Empty;
+
+            lc
+                .MinimumLevel.Debug()
+                .Enrich.WithProperty("Application", "ASG - Identity")
+                .Enrich.WithExceptionDetails()
+                .Enrich.FromLogContext()
+                .WriteTo.Seq(seqUrl)
+                .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information);        
+    });
+        // lc
+        // .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+        // .WriteTo.Seq("https://seq:45341")
+        // .Enrich.FromLogContext()
+        // .ReadFrom.Configuration(ctx.Configuration));
 
     var app = builder
         .ConfigureServices()
