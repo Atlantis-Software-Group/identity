@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build migrator",
+			"type": "process",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"${workspaceFolder}/src/asg.data.migrator"
+			],
+			"problemMatcher": "$msCompile"
+		}
+	]
+}
