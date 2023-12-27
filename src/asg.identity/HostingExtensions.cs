@@ -1,9 +1,8 @@
-using asg.identity;
+using asg.data.DbContexts;
+using asg.data.Models;
 using asg.identity.Pages.Admin.ApiScopes;
 using asg.identity.Pages.Admin.Clients;
 using asg.identity.Pages.Admin.IdentityScopes;
-using Duende.IdentityServer;
-using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;

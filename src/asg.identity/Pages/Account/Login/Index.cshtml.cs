@@ -1,3 +1,4 @@
+using asg.data.Models;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
