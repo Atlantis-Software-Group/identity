@@ -16,33 +16,21 @@ try
             IConfiguration config = ctx.Configuration;
             string seqUrl = config["Seq:ServerUrl"] ?? string.Empty;
 
+            Log.Information("Seq Url: {url}", seqUrl);
+
             lc
                 .MinimumLevel.Debug()
                 .Enrich.WithProperty("Application", "ASG - Identity")
                 .Enrich.WithExceptionDetails()
                 .Enrich.FromLogContext()
                 .WriteTo.Seq(seqUrl)
-                .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information);        
+                .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                                outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}");        
     });
-        // lc
-        // .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        // .WriteTo.Seq("https://seq:45341")
-        // .Enrich.FromLogContext()
-        // .ReadFrom.Configuration(ctx.Configuration));
 
     var app = builder
         .ConfigureServices()
         .ConfigurePipeline();
-
-    // this seeding is only for the template to bootstrap the DB and users.
-    // in production you will likely want a different approach.
-    if (args.Contains("/seed"))
-    {
-        Log.Information("Seeding database...");
-        SeedData.EnsureSeedData(app);
-        Log.Information("Done seeding database. Exiting.");
-        return;
-    }
 
     app.Run();
 }
