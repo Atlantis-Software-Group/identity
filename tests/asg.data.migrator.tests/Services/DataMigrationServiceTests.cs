@@ -1,5 +1,6 @@
 ﻿using asg.data.migrator.Constants;
 using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.DbMigration.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +19,7 @@ public class DataMigrationServiceTests
     private IHostEnvironment mockHostEnvironment { get; }
     private ICreateSeedScriptService mockCreateSeedScriptService { get; }
     private ICommandLineArgs mockCommandLineArgs { get; }
+    private IUpdateDatabaseService mockUpdateDatabaseService { get; }
     private DatabaseMigrationService Service { get; }
 
 
@@ -30,6 +32,7 @@ public class DataMigrationServiceTests
         mockHostEnvironment = Substitute.For<IHostEnvironment>();
         mockCreateSeedScriptService = Substitute.For<ICreateSeedScriptService>();
         mockCommandLineArgs = Substitute.For<ICommandLineArgs>();
+        mockUpdateDatabaseService = Substitute.For<IUpdateDatabaseService>();
 
         Service = new DatabaseMigrationService(mockLogger, 
                                                 mockHostApplicationLifeTime, 
@@ -37,7 +40,8 @@ public class DataMigrationServiceTests
                                                 mockConfiguration, 
                                                 mockHostEnvironment, 
                                                 mockCreateSeedScriptService,
-                                                mockCommandLineArgs);
+                                                mockCommandLineArgs,
+                                                mockUpdateDatabaseService);
     }
 
     [Fact]
@@ -53,8 +57,9 @@ public class DataMigrationServiceTests
 
     [Fact]
     public async Task CreateSeedScript_False_DbContextNameNotProvided()
-    {        
-        mockConfiguration["-scriptName"].Returns("random");
+    {   
+        mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
+        
         // Act
         bool result = await Service.CreateSeedScript();
 
@@ -66,8 +71,8 @@ public class DataMigrationServiceTests
     [Fact]
     public async Task CreateSeedScript_False_MigrationNameNotProvided()
     {
-        mockConfiguration["-scriptName"].Returns("random");        
-        mockConfiguration["-dbContextName"].Returns("db");
+        mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
+        mockCommandLineArgs.GetValue<string>("-dbContextName").Returns("db");
         mockHostEnvironment.ContentRootPath.Returns("C:\\Testing");
 
         //Act
@@ -80,15 +85,15 @@ public class DataMigrationServiceTests
     [Fact]
     public async Task CreateSeedScript_False_FileI_O_Error()
     {
-        mockConfiguration["-scriptName"].Returns("random");        
-        mockConfiguration["-dbContextName"].Returns("db");
-        mockConfiguration["-migrationName"].Returns("Users");
-        mockConfiguration["-environmentNames"].Returns("Development,Integration");
+        mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
+        mockCommandLineArgs.GetValue<string>("-dbContextName").Returns("db");
+        mockCommandLineArgs.GetValue<string>("-migrationName").Returns("Users");
+        mockCommandLineArgs.GetCollectionValue<string>("-environmentNames").Returns(new List<string>{"Development","Integration"});
         mockHostEnvironment.ContentRootPath.Returns("C:\\Testing");
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns(string.Empty);
         
         mockCreateSeedScriptService.ErrorMessage.Returns(ErrorMessageConstants.FileIOError);
@@ -102,15 +107,15 @@ public class DataMigrationServiceTests
     [Fact]
     public async Task CreateSeedScript_True_SeedScriptCreated_OneEnvironment()
     {
-        mockConfiguration["-scriptName"].Returns("random");        
-        mockConfiguration["-dbContextName"].Returns("db");
-        mockConfiguration["-migrationName"].Returns("Users");
-        mockConfiguration["-environmentNames"].Returns("Development");
+        mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
+        mockCommandLineArgs.GetValue<string>("-dbContextName").Returns("db");
+        mockCommandLineArgs.GetValue<string>("-migrationName").Returns("Users");
+        mockCommandLineArgs.GetCollectionValue<string>("-environmentNames").Returns(new List<string>{"Development"});
         mockHostEnvironment.ContentRootPath.Returns("C:\\Testing");
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns("Hi");
         //Act
         bool result = await Service.CreateSeedScript();
@@ -123,15 +128,15 @@ public class DataMigrationServiceTests
     [Fact]
     public async Task CreateSeedScript_True_SeedScriptCreated_MultipleEnvironment()
     {
-        mockConfiguration["-scriptName"].Returns("random");        
-        mockConfiguration["-dbContextName"].Returns("db");
-        mockConfiguration["-migrationName"].Returns("Users");
-        mockConfiguration["-environmentNames"].Returns("Development,Integration");
+        mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
+        mockCommandLineArgs.GetValue<string>("-dbContextName").Returns("db");
+        mockCommandLineArgs.GetValue<string>("-migrationName").Returns("Users");
+        mockCommandLineArgs.GetCollectionValue<string>("-environmentNames").Returns(new List<string>{"Development","Integration"});
         mockHostEnvironment.ContentRootPath.Returns("C:\\Testing");
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns("Hello there");
         //Act
         bool result = await Service.CreateSeedScript();

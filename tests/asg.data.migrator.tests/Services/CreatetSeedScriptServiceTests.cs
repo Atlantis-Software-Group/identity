@@ -4,15 +4,15 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit.Abstractions;
 
-namespace asg.data.migrator.tests;
+namespace asg.data.migrator.tests.Services;
 
-public class CreatetSeedScriptServiceTests
+public class CreateSeedScriptServiceTests
 {
     private ILogger<CreateSeedScriptService> mockLogger { get; }
     private IFileProviderService mockFileProviderService { get; }
 
     private CreateSeedScriptService Service { get; }
-    public CreatetSeedScriptServiceTests(ITestOutputHelper testOutputHelper)
+    public CreateSeedScriptServiceTests(ITestOutputHelper testOutputHelper)
     {
         mockLogger = new UnitTestLogger<CreateSeedScriptService>(testOutputHelper);
         mockFileProviderService = Substitute.For<IFileProviderService>();
@@ -25,16 +25,26 @@ public class CreatetSeedScriptServiceTests
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
+
         string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[0]);
 
-        Assert.Equal(@"[MigrationName(""Users"")]
-public class random : SeedData
+        Assert.Equal(@"using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using asg.data.migrator.Services;
+using asg.data.migrator.SeedData.Attributes;
+
+namespace asg.Data.Migrator.SeedData.Databases.HelloDb;
+
+[MigrationName(""Users"")]
+[DatabaseName(""HelloDbContext"")]
+public class Random : SeedDataService
 {
-    public random(IConfiguration configuration) : base (configuration) {}
+    public Random(IConfiguration configuration, ILogger<Random> logger) : base (configuration, logger) {}
 
   public override Task<bool> Seed()
   {
       //Seed data
+      throw new NotImplementedException();
   }
 }
 
@@ -48,15 +58,24 @@ public class random : SeedData
                                 .Returns(true);
         string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development" });
 
-        Assert.Equal(@"[MigrationName(""Users"")]
+        Assert.Equal(@"using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using asg.data.migrator.Services;
+using asg.data.migrator.SeedData.Attributes;
+
+namespace asg.Data.Migrator.SeedData.Databases.HelloDb;
+
+[MigrationName(""Users"")]
 [SeedEnvironment(""Development"")]
-public class random : SeedData
+[DatabaseName(""HelloDbContext"")]
+public class Random : SeedDataService
 {
-    public random(IConfiguration configuration) : base (configuration) {}
+    public Random(IConfiguration configuration, ILogger<Random> logger) : base (configuration, logger) {}
 
   public override Task<bool> Seed()
   {
       //Seed data
+      throw new NotImplementedException();
   }
 }
 
@@ -70,16 +89,25 @@ public class random : SeedData
                                 .Returns(true);
         string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
 
-        Assert.Equal(@"[MigrationName(""Users"")]
+        Assert.Equal(@"using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using asg.data.migrator.Services;
+using asg.data.migrator.SeedData.Attributes;
+
+namespace asg.Data.Migrator.SeedData.Databases.HelloDb;
+
+[MigrationName(""Users"")]
 [SeedEnvironment(""Development"")]
 [SeedEnvironment(""Integration"")]
-public class random : SeedData
+[DatabaseName(""HelloDbContext"")]
+public class Random : SeedDataService
 {
-    public random(IConfiguration configuration) : base (configuration) {}
+    public Random(IConfiguration configuration, ILogger<Random> logger) : base (configuration, logger) {}
 
   public override Task<bool> Seed()
   {
       //Seed data
+      throw new NotImplementedException();
   }
 }
 
