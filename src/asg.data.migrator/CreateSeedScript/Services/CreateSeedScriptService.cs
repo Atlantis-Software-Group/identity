@@ -23,7 +23,8 @@ using asg.data.migrator;
 using Microsoft.Extensions.Configuration;
         */
         scriptContent.AppendLine("using asg.data.migrator;");
-        scriptContent.AppendLine("using Microsoft.Extensions.Configuration;");
+        scriptContent.AppendLine("using Microsoft.Extensions.Configuration;");        
+        scriptContent.AppendLine("using Microsoft.Extensions.Logging;");
         scriptContent.AppendLine();
         scriptContent.AppendLine(string.Format(MigrationNameTemplate, migrationName));
         foreach (string env in environmentnames)
@@ -57,7 +58,7 @@ using Microsoft.Extensions.Configuration;
 
         classTemplate.AppendLine(string.Format("public class {0} : SeedData", updatetdScriptName.ToString()));
         classTemplate.AppendLine("{");
-        classTemplate.AppendLine(string.Format("    public {0}(IConfiguration configuration) : base (configuration) {{}}", updatetdScriptName.ToString()));
+        classTemplate.AppendLine(string.Format("    public {0}(IConfiguration configuration, ILogger<{0}> logger) : base (configuration, logger) {{}}", updatetdScriptName.ToString()));
         classTemplate.AppendLine();
         classTemplate.AppendLine("  public override Task<bool> Seed()");
         classTemplate.AppendLine("  {");
