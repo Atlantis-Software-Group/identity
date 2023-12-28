@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data", "src\asg.data\as
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data.migrator", "src\asg.data.migrator\asg.data.migrator.csproj", "{4A2D8671-E96B-4912-AFE3-24A2092DE862}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data.migrator.tests", "tests\asg.data.migrator.tests\asg.data.migrator.tests.csproj", "{BF4D1716-58EA-453E-9057-9601F36AD116}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4A2D8671-E96B-4912-AFE3-24A2092DE862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A2D8671-E96B-4912-AFE3-24A2092DE862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A2D8671-E96B-4912-AFE3-24A2092DE862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF4D1716-58EA-453E-9057-9601F36AD116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF4D1716-58EA-453E-9057-9601F36AD116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF4D1716-58EA-453E-9057-9601F36AD116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF4D1716-58EA-453E-9057-9601F36AD116}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,6 +14,13 @@
         <PackageReference Include="Serilog.Sinks.Seq" Version="6.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SeedData\Databases\" />
+    <Folder Include="SeedData\Databases\ApplicationDb\" />
+    <Folder Include="SeedData\Databases\ConfigurationDb\" />
+    <Folder Include="SeedData\Models\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
