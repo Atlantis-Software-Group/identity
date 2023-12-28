@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build migrator",
             "program": "${workspaceFolder}/src/asg.data.migrator/bin/Debug/net7.0/asg.data.migrator.dll",
-            "args": ["-migrate", "-createSeedScript", "-scriptName Configuration", "-dbContextName ConfigurationDb", "-migrationName Configuration"],
+            "args": ["-migrate", "-createSeedScript", "-scriptName Configuration", "-dbContextName ConfigurationDb", "-migrationName Configuration", "-environmentNames Development Local"],
             "cwd": "${workspaceFolder}/src/asg.data.migrator",
             "stopAtEntry": false,
             "console": "internalConsole",
