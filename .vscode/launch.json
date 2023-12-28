@@ -1,7 +1,21 @@
 {
     "configurations": [
         {
-            "name": "DbMigrator (Local)",
+            "name": "DbMigrator CreateSeedScript",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build migrator",
+            "program": "${workspaceFolder}/src/asg.data.migrator/bin/Debug/net7.0/asg.data.migrator.dll",
+            "args": ["-migrate", "-createSeedScript", "-scriptName test", "-dbContextName ApplicationDb", "-migrationName Users"],
+            "cwd": "${workspaceFolder}/src/asg.data.migrator",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "DOTNET_ENVIRONMENT":"Local",
+            }
+        },
+        {
+            "name": "DbMigrator Migrate",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build migrator",
