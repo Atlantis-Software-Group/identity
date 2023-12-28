@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build migrator",
             "program": "${workspaceFolder}/src/asg.data.migrator/bin/Debug/net7.0/asg.data.migrator.dll",
-            "args": ["-migrate", "-createSeedScript", "-scriptName test", "-dbContextName ApplicationDb", "-migrationName Users"],
+            "args": ["-migrate", "-createSeedScript", "-scriptName Configuration", "-dbContextName ConfigurationDb", "-migrationName Configuration"],
             "cwd": "${workspaceFolder}/src/asg.data.migrator",
             "stopAtEntry": false,
             "console": "internalConsole",
@@ -26,6 +26,7 @@
             "console": "internalConsole",
             "env": {
                 "DOTNET_ENVIRONMENT":"Local",
+                "WebClient__Secret": "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0"
             }
         },
         {
