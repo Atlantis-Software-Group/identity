@@ -73,6 +73,17 @@ public class CommandLineOption<T, T1> : CommandLineOption<T>
     {
         List<T> values = new List<T>();
 
+        if ( string.IsNullOrWhiteSpace(ValueString) )
+            return values;
+
+        string[] valuesArr = ValueString.Split(' ');
+
+        foreach ( string val in valuesArr )
+        {
+            T convertedValue = (T)Convert.ChangeType(val, Type);
+            values.Add(convertedValue);
+        }
+
         return values;
     }
 }
