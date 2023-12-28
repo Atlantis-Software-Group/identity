@@ -6,6 +6,7 @@
 
   <ItemGroup>
     		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.3.6" />
+    		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.14" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.14" />
 		    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.14" />
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
@@ -15,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SeedData\Databases\" />
+    <Folder Include="DbMigration\Interfaces\" />
+    <Folder Include="DbMigration\Services\" />
     <Folder Include="SeedData\Databases\ApplicationDb\" />
     <Folder Include="SeedData\Databases\ConfigurationDb\" />
     <Folder Include="SeedData\Models\" />

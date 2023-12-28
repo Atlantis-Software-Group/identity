@@ -1,14 +1,9 @@
-﻿using System.Text;
-using asg.data.DbContexts;
+﻿using asg.data.DbContexts;
 using asg.data.migrator.Constants;
 using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.DbMigration.Interfaces;
 using Duende.IdentityServer.EntityFramework.DbContexts;
-using Duende.IdentityServer.Models;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +20,8 @@ public class DatabaseMigrationService : IHostedService
                                     IConfiguration configuration,
                                     IHostEnvironment hostEnvironment,
                                     ICreateSeedScriptService createSeedScriptService,
-                                    ICommandLineArgs commandLineArgs)
+                                    ICommandLineArgs commandLineArgs,
+                                    IUpdateDatabaseService updateDatabaseService)
     {
         Logger = logger;
         ApplicationLifetime = applicationLifetime;
@@ -34,6 +30,7 @@ public class DatabaseMigrationService : IHostedService
         HostEnvironment = hostEnvironment;
         CreateSeedScriptService = createSeedScriptService;
         CommandLineArgs = commandLineArgs;
+        UpdateDatabaseService = updateDatabaseService;
         ApplicationLifetime.ApplicationStarted.Register(OnStarted);
     }
 
@@ -95,7 +92,7 @@ public class DatabaseMigrationService : IHostedService
 
         string[] environmentNames = environmentNameArgs.ToArray();
 
-        string scriptCreated = await CreateSeedScriptService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, environmentNames);
+        string scriptCreated = await CreateSeedScriptService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
 
         if ( string.IsNullOrWhiteSpace(scriptCreated) )
             ErrorMessage = CreateSeedScriptService.ErrorMessage;
@@ -120,22 +117,19 @@ public class DatabaseMigrationService : IHostedService
 
         foreach (DbContext dbContext in dbContexts)
         {
-            Logger.LogInformation("DbContext: {name}", dbContext.GetType());
-            IMigrator? migrator = dbContext.GetInfrastructure().GetService<IMigrator>();
+            bool migrationSuccessful = await UpdateDatabaseService.MigrateAndSeedDatabase(dbContext);
 
-            if (migrator is null)
+            if ( !migrationSuccessful )
             {
-                Logger.LogWarning("Skipping DbContext: {context} - Migrator not found.", dbContext.GetType());
-                continue;
-            }
-
-            IEnumerable<string> pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
-            Logger.LogInformation("Found {MigrationCount} Migration(s)", pendingMigrations.Count());
-
-            foreach (string migration in pendingMigrations)
-            {
-                Logger.LogInformation("Starting migration: {migration}", migration);
-                await migrator.MigrateAsync(migration);
+                if ( UpdateDatabaseService.Error is null )
+                {
+                    Exception unknownError = new Exception("Unknown error occured!");
+                    Logger.LogCritical(unknownError, "Unknown error occurred while Migrating and Seeding - Database: {db}", typeof(DbContext));
+                    throw unknownError;
+                }
+                
+                Logger.LogError(UpdateDatabaseService.Error, "Error encountered while Migrating and Seeding - Database: {db}", typeof(DbContext));
+                throw UpdateDatabaseService.Error;
             }
         }
     }
@@ -147,6 +141,7 @@ public class DatabaseMigrationService : IHostedService
     public IHostEnvironment HostEnvironment { get; }
     public ICreateSeedScriptService CreateSeedScriptService { get; }
     public ICommandLineArgs CommandLineArgs { get; }
+    public IUpdateDatabaseService UpdateDatabaseService { get; }
 
     // initialize the application
     public Task StartAsync(CancellationToken cancellationToken)

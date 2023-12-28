@@ -4,7 +4,8 @@ using asg.data.migrator;
 using asg.data.migrator.CommandLine;
 using asg.data.migrator.CreateSeedScript.Interfaces;
 using asg.data.migrator.CreateSeedScript.Services;
-using Duende.IdentityServer.EntityFramework.DbContexts;
+using asg.data.migrator.DbMigration.Interfaces;
+using asg.data.migrator.DbMigration.Services;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -60,6 +61,7 @@ public class Program
                 services.AddHostedService<DatabaseMigrationService>();
                 services.AddScoped<IFileProviderService, FileProviderService>();
                 services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
+                services.AddScoped<IUpdateDatabaseService, UpdateDatabaseService>();
                 services.AddSingleton<ICommandLineArgs>(parsedArgs);
 
                 var connectionString = ctx.Configuration.GetConnectionString("DefaultConnection");
@@ -153,7 +155,7 @@ public class Program
         CommandLineOption<string> migrationNameOption = new CommandLineOption<string>("migrationName");
         parser.Add(migrationNameOption.Name, migrationNameOption);
 
-        CommandLineOption<string> environmentNamesOption = new CommandLineOption<string>("environmentNames");
+        CommandLineOption<string, List<string>> environmentNamesOption = new CommandLineOption<string, List<string>>("environmentNames");
         parser.Add(environmentNamesOption.Name, environmentNamesOption);
     }
 }
