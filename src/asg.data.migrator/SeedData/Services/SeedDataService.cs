@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace asg.data.migrator;
+namespace asg.data.migrator.Services;
 
-public abstract class SeedData : ISeedData
+public abstract class SeedDataService : ISeedData
 {
-    public SeedData(IConfiguration configuration, ILogger logger)
+    public SeedDataService(IConfiguration configuration, ILogger logger)
     {
         Configuration = configuration;
         Logger = logger;

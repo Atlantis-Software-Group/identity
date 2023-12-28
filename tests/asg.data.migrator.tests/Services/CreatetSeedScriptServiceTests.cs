@@ -25,7 +25,7 @@ public class CreatetSeedScriptServiceTests
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", new string[0]);
+        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[0]);
 
         Assert.Equal(@"[MigrationName(""Users"")]
 public class random : SeedData
@@ -46,7 +46,7 @@ public class random : SeedData
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", new string[] { "Development" });
+        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development" });
 
         Assert.Equal(@"[MigrationName(""Users"")]
 [SeedEnvironment(""Development"")]
@@ -68,7 +68,7 @@ public class random : SeedData
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", new string[] { "Development", "Integration" });
+        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
 
         Assert.Equal(@"[MigrationName(""Users"")]
 [SeedEnvironment(""Development"")]
@@ -93,7 +93,7 @@ public class random : SeedData
                                 .Returns(false);
         
         mockFileProviderService.ErrorMessage.Returns(ErrorMessageConstants.FileAlreadyExists);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", new string[] { "Development", "Integration" });
+        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
 
         bool HasContent = !string.IsNullOrWhiteSpace(result);
         Assert.False(HasContent);

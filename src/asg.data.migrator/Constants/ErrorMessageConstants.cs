@@ -7,4 +7,5 @@ public static class ErrorMessageConstants
     public static string MigrationNameNotProvided = "MigrationName was not provideed. Example usage: -migrationName name";
     public static string FileIOError = "Error encountered while attempting to create the script file.";
     public static string FileAlreadyExists = "File already exists";
+    public static string DuplicateClass = "Class with the same name already exists.";
 }

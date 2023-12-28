@@ -1,4 +1,4 @@
-﻿namespace asg.data.migrator;
+﻿namespace asg.data.migrator.SeedData.Attributes;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class MigrationNameAttribute : Attribute
