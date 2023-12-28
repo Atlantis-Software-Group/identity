@@ -10,23 +10,11 @@ public abstract class CommandLineOption
 
     public abstract Type CollectionType { get; }
 
+    public virtual bool IsCollection { get; } = false;
+
     public bool IsFlag {
         get {
             return Type == typeof(bool);
-        }
-    }
-
-    public bool IsCollection {
-        get {
-            try
-            {
-                Type collectionType = CollectionType;
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 
@@ -65,6 +53,8 @@ public class CommandLineOption<T, T1> : CommandLineOption<T>
             return typeof(T1);
         }
     }
+
+    public override bool IsCollection { get; } = true;
     public CommandLineOption(string name) : base(name)
     {
     }
