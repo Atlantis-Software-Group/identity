@@ -118,7 +118,7 @@ public class Program
         }
         catch (Exception e)
         {
-            if (!args.Contains("-ef"))
+            if (!parsedArgs.GetValue<bool>("-ef"))
             {
                 Log.Fatal(e, "Host Terminatted unexpectedly");
                 return 1;
