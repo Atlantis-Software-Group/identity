@@ -1,6 +1,9 @@
 ﻿using System.Text;
 using asg.data.DbContexts;
 using asg.data.migrator;
+using asg.data.migrator.CommandLine;
+using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.CreateSeedScript.Services;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -15,14 +18,18 @@ public class Program
     public static async Task<int> Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
-                        .MinimumLevel.Debug()
-                        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
-                        .WriteTo.Console()
-                        .CreateBootstrapLogger();
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Information)
+                .WriteTo.Console()
+                .CreateBootstrapLogger();
 
         Log.Information("Args: {@args}", args);
+        Parser parser = new Parser(args);
+        CreateCommandLineOptions(parser);
 
-        // Serilog.Debugging.SelfLog.Enable(Console.Error);
+        ICommandLineArgs parsedArgs = parser.Parse();
+        Log.Information("Parsed Args: {@parsedArgs}", parsedArgs);
+
         try
         {
             Log.Information("Configuring Host");
@@ -44,12 +51,16 @@ public class Program
             Log.Information("Current Working Directory: {directory}", workingDirPath);
             builder.UseContentRoot(workingDirPath.ToString());
 
-            if ( args.Contains("-ef") && string.Equals(environment, "Local", StringComparison.OrdinalIgnoreCase))
+
+            if (parsedArgs.GetValue<bool>("-ef") && string.Equals(environment, "Local", StringComparison.OrdinalIgnoreCase))
                 builder.UseEnvironment("Development");
 
             builder.ConfigureServices((ctx, services) =>
             {
                 services.AddHostedService<DatabaseMigrationService>();
+                services.AddScoped<IFileProviderService, FileProviderService>();
+                services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
+                services.AddSingleton<ICommandLineArgs>(parsedArgs);
 
                 var connectionString = ctx.Configuration.GetConnectionString("DefaultConnection");
                 services.AddDbContext<ApplicationDbContext>(options =>
@@ -59,15 +70,17 @@ public class Program
 
                 services.AddConfigurationDbContext(opts =>
                 {
-                    opts.ConfigureDbContext = options => {
-                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));                        
+                    opts.ConfigureDbContext = options =>
+                    {
+                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                     };
                 });
 
                 services.AddOperationalDbContext(opts =>
                 {
-                    opts.ConfigureDbContext = options => {
-                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));                        
+                    opts.ConfigureDbContext = options =>
+                    {
+                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
                     };
                 });
             });
@@ -90,9 +103,9 @@ public class Program
 
             IHost host = builder.Build();
 
-            if (args.Contains("-migrate"))
+            if (parsedArgs.GetValue<bool>("-migrate"))
             {
-                Log.Information("Starting Host");                
+                Log.Information("Starting Host");
                 await host.StartAsync();
 
                 await host.WaitForShutdownAsync();
@@ -105,7 +118,7 @@ public class Program
         }
         catch (Exception e)
         {
-            if ( !args.Contains("-ef") )
+            if (!args.Contains("-ef"))
             {
                 Log.Fatal(e, "Host Terminatted unexpectedly");
                 return 1;
@@ -117,5 +130,30 @@ public class Program
         }
 
         return 0;
+    }
+
+    private static void CreateCommandLineOptions(Parser parser)
+    {
+        CommandLineOption<bool> migrateOption = new CommandLineOption<bool>("migrate");
+        parser.Add(migrateOption.Name, migrateOption);
+
+        CommandLineOption<bool> efOption = new CommandLineOption<bool>("ef");
+        parser.Add(efOption.Name, efOption);
+
+        // createSeedScript
+        CommandLineOption<bool> createSeedScriptOption = new CommandLineOption<bool>("createSeedScript");
+        parser.Add(createSeedScriptOption.Name, createSeedScriptOption);
+
+        CommandLineOption<string> scriptNameOption = new CommandLineOption<string>("scriptName");
+        parser.Add(scriptNameOption.Name, scriptNameOption);
+
+        CommandLineOption<string> dbContextNameOption = new CommandLineOption<string>("dbContextName");
+        parser.Add(dbContextNameOption.Name, dbContextNameOption);
+
+        CommandLineOption<string> migrationNameOption = new CommandLineOption<string>("migrationName");
+        parser.Add(migrationNameOption.Name, migrationNameOption);
+
+        CommandLineOption<string> environmentNamesOption = new CommandLineOption<string>("environmentNames");
+        parser.Add(environmentNamesOption.Name, environmentNamesOption);
     }
 }
