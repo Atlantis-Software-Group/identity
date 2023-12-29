@@ -59,7 +59,7 @@ public class CreateSeedScriptService : ICreateSeedScriptService
                                     .SelectMany(da => da.GetTypes())
                                     .Where(type => type.IsSubclassOf(typeof(SeedDataService)) 
                                             && !type.IsAbstract 
-                                            && type.Namespace != namepsaceString
+                                            && type.Namespace == namepsaceString
                                             && type.Name == scriptName)
                                     .FirstOrDefault();
 
