@@ -32,7 +32,7 @@ public class CommandLineOption<T> : CommandLineOption
         }
     }
 
-    public override Type CollectionType => throw new NotImplementedException();
+    public override Type CollectionType => typeof(T);
 
     public CommandLineOption(string name)
     {
