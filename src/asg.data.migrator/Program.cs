@@ -56,36 +56,6 @@ public class Program
             if (parsedArgs.GetValue<bool>("-ef") && string.Equals(environment, "Local", StringComparison.OrdinalIgnoreCase))
                 builder.UseEnvironment("Development");
 
-            builder.ConfigureServices((ctx, services) =>
-            {
-                services.AddHostedService<DatabaseMigrationService>();
-                services.AddScoped<IFileProviderService, FileProviderService>();
-                services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
-                services.AddScoped<IUpdateDatabaseService, UpdateDatabaseService>();
-                services.AddSingleton<ICommandLineArgs>(parsedArgs);
-
-                var connectionString = ctx.Configuration.GetConnectionString("DefaultConnection");
-                services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-                });
-
-                services.AddConfigurationDbContext(opts =>
-                {
-                    opts.ConfigureDbContext = options =>
-                    {
-                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-                    };
-                });
-
-                services.AddOperationalDbContext(opts =>
-                {
-                    opts.ConfigureDbContext = options =>
-                    {
-                        options.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
-                    };
-                });
-            });
 
             builder.UseSerilog((ctx, services, configuration) =>
             {
@@ -101,6 +71,53 @@ public class Program
                     .Enrich.FromLogContext()
                     .WriteTo.Seq(seqUrl)
                     .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information);
+            });
+
+            builder.ConfigureServices((ctx, services) =>
+            {
+                services.AddHostedService<DatabaseMigrationService>();
+                services.AddScoped<IFileProviderService, FileProviderService>();
+                services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
+                services.AddScoped<IUpdateDatabaseService, UpdateDatabaseService>();
+                services.AddScoped<ISeedDataHistoryRepository, SeedDataHistoryRepository>();
+                services.AddScoped<IAssemblyInformationService, AssemblyInformationService>();
+                services.AddScoped<ISeeder, Seeder>();
+                services.AddSingleton<ICommandLineArgs>(parsedArgs);
+
+                IServiceCollection efServiceCollection = new ServiceCollection();                
+                efServiceCollection.AddScoped<ISeedDataHistoryRepository, SeedDataHistoryRepository>();
+                efServiceCollection.AddEntityFrameworkSqlServer();
+
+                var ApplicationDbConnectionString = ctx.Configuration.GetConnectionString("ApplicationDb");
+                var ConfigurationDbConnectionString = ctx.Configuration.GetConnectionString("ConfigurationDb");
+                var OperationalDbConnectionString = ctx.Configuration.GetConnectionString("OperationalDb");
+
+                services.AddDbContext<ApplicationDbContext>(options =>
+                {                    
+                    options.UseSqlServer(ApplicationDbConnectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                    options.UseInternalServiceProvider(efServiceCollection.BuildServiceProvider());
+                });
+
+                services.AddConfigurationDbContext(opts =>
+                {
+                    opts.ConfigureDbContext = options =>
+                    {
+                        options.UseSqlServer(ConfigurationDbConnectionString, 
+                            dbOpts => {
+                                dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName);
+                        });
+                        options.UseInternalServiceProvider(efServiceCollection.BuildServiceProvider());
+                    };
+                });
+
+                services.AddOperationalDbContext(opts =>
+                {
+                    opts.ConfigureDbContext = options =>
+                    {
+                        options.UseSqlServer(OperationalDbConnectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));                        
+                        options.UseInternalServiceProvider(efServiceCollection.BuildServiceProvider());
+                    };
+                });
             });
 
             IHost host = builder.Build();

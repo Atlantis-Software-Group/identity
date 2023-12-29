@@ -117,7 +117,16 @@ public class DatabaseMigrationService : IHostedService
 
         foreach (DbContext dbContext in dbContexts)
         {
-            bool migrationSuccessful = await UpdateDatabaseService.MigrateAndSeedDatabase(dbContext);
+            bool migrationSuccessful = false;
+            try
+            {
+                migrationSuccessful = await UpdateDatabaseService.MigrateAndSeedDatabase(dbContext);
+            }
+            catch (Exception e )
+            {
+                Logger.LogError(e, "error occurred during Migration and Seeding process");
+                throw;
+            }
 
             if ( !migrationSuccessful )
             {
