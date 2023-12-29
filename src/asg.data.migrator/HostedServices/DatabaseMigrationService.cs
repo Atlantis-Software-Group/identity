@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace asg.data.migrator;
+namespace asg.data.migrator.HostedService;
 
 public class DatabaseMigrationService : IHostedService
 {
@@ -19,18 +19,14 @@ public class DatabaseMigrationService : IHostedService
                                     IServiceScopeFactory serviceScopeFactory,
                                     IConfiguration configuration,
                                     IHostEnvironment hostEnvironment,
-                                    ICreateSeedScriptService createSeedScriptService,
-                                    ICommandLineArgs commandLineArgs,
-                                    IUpdateDatabaseService updateDatabaseService)
+                                    ICommandLineArgs commandLineArgs)
     {
         Logger = logger;
         ApplicationLifetime = applicationLifetime;
         ServiceScopeFactory = serviceScopeFactory;
         Configuration = configuration;
         HostEnvironment = hostEnvironment;
-        CreateSeedScriptService = createSeedScriptService;
         CommandLineArgs = commandLineArgs;
-        UpdateDatabaseService = updateDatabaseService;
         ApplicationLifetime.ApplicationStarted.Register(OnStarted);
     }
 
@@ -92,6 +88,8 @@ public class DatabaseMigrationService : IHostedService
 
         string[] environmentNames = environmentNameArgs.ToArray();
 
+        using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
+        CreateSeedScriptService = scope.ServiceProvider.GetRequiredService<ICreateSeedScriptService>();
         string scriptCreated = await CreateSeedScriptService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
 
         if ( string.IsNullOrWhiteSpace(scriptCreated) )
@@ -107,6 +105,7 @@ public class DatabaseMigrationService : IHostedService
         IServiceProvider sp = scope.ServiceProvider;
         List<DbContext> dbContexts = new List<DbContext>();
 
+        UpdateDatabaseService = sp.GetRequiredService<IUpdateDatabaseService>();
         ApplicationDbContext applicationDbContext = sp.GetRequiredService<ApplicationDbContext>();
         ConfigurationDbContext configurationDbContext = sp.GetRequiredService<ConfigurationDbContext>();
         PersistedGrantDbContext persistedGrantDbContext = sp.GetRequiredService<PersistedGrantDbContext>();
@@ -148,9 +147,9 @@ public class DatabaseMigrationService : IHostedService
     public IServiceScopeFactory ServiceScopeFactory { get; }
     public IConfiguration Configuration { get; }
     public IHostEnvironment HostEnvironment { get; }
-    public ICreateSeedScriptService CreateSeedScriptService { get; }
     public ICommandLineArgs CommandLineArgs { get; }
-    public IUpdateDatabaseService UpdateDatabaseService { get; }
+    public ICreateSeedScriptService? CreateSeedScriptService { get; set; }
+    public IUpdateDatabaseService? UpdateDatabaseService { get; set; }
 
     // initialize the application
     public Task StartAsync(CancellationToken cancellationToken)

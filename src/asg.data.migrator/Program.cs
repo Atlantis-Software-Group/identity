@@ -6,6 +6,7 @@ using asg.data.migrator.CreateSeedScript.Interfaces;
 using asg.data.migrator.CreateSeedScript.Services;
 using asg.data.migrator.DbMigration.Interfaces;
 using asg.data.migrator.DbMigration.Services;
+using asg.data.migrator.HostedService;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -79,7 +80,6 @@ public class Program
                 services.AddScoped<IFileProviderService, FileProviderService>();
                 services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
                 services.AddScoped<IUpdateDatabaseService, UpdateDatabaseService>();
-                services.AddScoped<ISeedDataHistoryRepository, SeedDataHistoryRepository>();
                 services.AddScoped<IAssemblyInformationService, AssemblyInformationService>();
                 services.AddScoped<ISeeder, Seeder>();
                 services.AddSingleton<ICommandLineArgs>(parsedArgs);
