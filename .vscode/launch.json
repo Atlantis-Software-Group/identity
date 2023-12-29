@@ -26,7 +26,10 @@
             "console": "internalConsole",
             "env": {
                 "DOTNET_ENVIRONMENT":"Local",
-                "WebClient__Secret": "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0"
+                "WebClient__Secret": "49C1A7E1-0C79-4A89-A3D6-A37998FB86B0",
+                "ConnectionStrings__ConfigurationDb":"Server=localhost,3106;Initial Catalog=ConfigurationDb;User ID=sa;Password=P@ssw0rd;Encrypt=False;trusted_connection=False;Persist Security Info=False",
+                "ConnectionStrings__OperationalDb":"Server=localhost,3106;Initial Catalog=OperationalDb;User ID=sa;Password=P@ssw0rd;Encrypt=False;trusted_connection=False;Persist Security Info=False",
+                "ConnectionStrings__ApplicationDb":"Server=localhost,3106;Initial Catalog=ApplicationDb;User ID=sa;Password=P@ssw0rd;Encrypt=False;trusted_connection=False;Persist Security Info=False"
             }
         },
         {
