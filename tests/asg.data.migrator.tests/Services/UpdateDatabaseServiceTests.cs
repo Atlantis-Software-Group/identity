@@ -1,5 +1,6 @@
 ﻿using asg.data.migrator.DbMigration.Interfaces;
 using asg.data.migrator.DbMigration.Services;
+using asg.data.migrator.Shared.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

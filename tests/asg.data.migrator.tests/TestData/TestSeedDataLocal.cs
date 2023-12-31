@@ -6,12 +6,11 @@ using Microsoft.Extensions.Logging;
 namespace asg.data.migrator.tests.TestData;
 
 [MigrationName("Test")]
-[SeedEnvironment("Development")]
-[SeedEnvironment("Integration")]
+[SeedEnvironment("Local")]
 [DatabaseName("ApplicationDbContext")]
-public class TestSeedData : SeedDataService
+public class TestSeedDataLocal : SeedDataService
 {
-    public TestSeedData(IConfiguration configuration, ILogger<TestSeedData> logger) 
+    public TestSeedDataLocal(IConfiguration configuration, ILogger<TestSeedData> logger) 
         : base(configuration, logger)
     {
     }

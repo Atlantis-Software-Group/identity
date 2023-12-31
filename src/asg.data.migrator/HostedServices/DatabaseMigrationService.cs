@@ -32,6 +32,10 @@ public class DatabaseMigrationService : IHostedService
 
     private async void OnStarted()
     {
+        Dictionary<string, object> scopeState = new Dictionary<string, object>{
+            {"TraceId", Guid.NewGuid().ToString() }
+        };
+        using var scope = Logger.BeginScope(scopeState);
         Logger.LogInformation("OnStarted has been called");
 
         bool createSeedScript = CommandLineArgs.GetValue<bool>("-createSeedScript");
@@ -39,7 +43,7 @@ public class DatabaseMigrationService : IHostedService
 
         if ( createSeedScript )
         {
-            bool result = await CreateSeedScript();
+            bool result = await CreateSeedTemplate();
 
             if ( !result )
             {
@@ -54,7 +58,7 @@ public class DatabaseMigrationService : IHostedService
         ApplicationLifetime.StopApplication();
     }
 
-    public async Task<bool> CreateSeedScript()
+    public async Task<bool> CreateSeedTemplate()
     {
         string? scriptName = CommandLineArgs.GetValue<string>("-scriptName");
 
@@ -90,7 +94,7 @@ public class DatabaseMigrationService : IHostedService
 
         using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
         CreateSeedTemplateService = scope.ServiceProvider.GetRequiredService<ICreateSeedTemplateService>();
-        string scriptCreated = await CreateSeedTemplateService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
+        string scriptCreated = await CreateSeedTemplateService.CreateSeedTemplateFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
 
         if ( string.IsNullOrWhiteSpace(scriptCreated) )
             ErrorMessage = CreateSeedTemplateService.ErrorMessage;

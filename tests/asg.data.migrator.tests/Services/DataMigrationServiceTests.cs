@@ -1,6 +1,7 @@
 ﻿using asg.data.migrator.Constants;
-using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
 using asg.data.migrator.DbMigration.Interfaces;
+using asg.data.migrator.HostedService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +18,7 @@ public class DataMigrationServiceTests
     private IServiceScopeFactory mockServiceScopeFactory { get; }
     private IConfiguration mockConfiguration { get; }
     private IHostEnvironment mockHostEnvironment { get; }
-    private ICreateSeedScriptService mockCreateSeedScriptService { get; }
+    private ICreateSeedTemplateService mockCreateSeedTemplateService { get; }
     private ICommandLineArgs mockCommandLineArgs { get; }
     private IUpdateDatabaseService mockUpdateDatabaseService { get; }
     private DatabaseMigrationService Service { get; }
@@ -30,25 +31,32 @@ public class DataMigrationServiceTests
         mockServiceScopeFactory = Substitute.For<IServiceScopeFactory>();
         mockConfiguration = Substitute.For<IConfiguration>();
         mockHostEnvironment = Substitute.For<IHostEnvironment>();
-        mockCreateSeedScriptService = Substitute.For<ICreateSeedScriptService>();
+        mockCreateSeedTemplateService = Substitute.For<ICreateSeedTemplateService>();
         mockCommandLineArgs = Substitute.For<ICommandLineArgs>();
         mockUpdateDatabaseService = Substitute.For<IUpdateDatabaseService>();
+        
+        IServiceProvider mockServiceProvider = Substitute.For<IServiceProvider>();
+        mockServiceProvider.GetService(typeof(ICreateSeedTemplateService)).Returns(mockCreateSeedTemplateService);
+        mockServiceProvider.GetService(typeof(IUpdateDatabaseService)).Returns(mockUpdateDatabaseService);
+
+        IServiceScope mockServiceScope = Substitute.For<IServiceScope>();
+        mockServiceScope.ServiceProvider.Returns(mockServiceProvider);
+
+        mockServiceScopeFactory.CreateScope().Returns(mockServiceScope);
 
         Service = new DatabaseMigrationService(mockLogger, 
                                                 mockHostApplicationLifeTime, 
                                                 mockServiceScopeFactory, 
                                                 mockConfiguration, 
-                                                mockHostEnvironment, 
-                                                mockCreateSeedScriptService,
-                                                mockCommandLineArgs,
-                                                mockUpdateDatabaseService);
+                                                mockHostEnvironment,
+                                                mockCommandLineArgs);
     }
 
     [Fact]
     public async Task CreateSeedScript_False_ScriptNameNotProvided()
     {        
         // Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         // Assert
         Assert.False(result);
@@ -61,7 +69,7 @@ public class DataMigrationServiceTests
         mockCommandLineArgs.GetValue<string>("-scriptName").Returns("random");
         
         // Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         // Assert
         Assert.False(result);
@@ -76,7 +84,7 @@ public class DataMigrationServiceTests
         mockHostEnvironment.ContentRootPath.Returns("C:\\Testing");
 
         //Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         Assert.False(result);
         Assert.Equal(ErrorMessageConstants.MigrationNameNotProvided, Service.ErrorMessage);
@@ -93,12 +101,12 @@ public class DataMigrationServiceTests
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedTemplateService.CreateSeedTemplateFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns(string.Empty);
         
-        mockCreateSeedScriptService.ErrorMessage.Returns(ErrorMessageConstants.FileIOError);
+        mockCreateSeedTemplateService.ErrorMessage.Returns(ErrorMessageConstants.FileIOError);
         //Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         Assert.False(result);
         Assert.Equal(ErrorMessageConstants.FileIOError, Service.ErrorMessage);
@@ -115,10 +123,10 @@ public class DataMigrationServiceTests
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedTemplateService.CreateSeedTemplateFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns("Hi");
         //Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         Assert.True(result);
         Assert.Collection(capturedEnvironmentNames, 
@@ -136,10 +144,10 @@ public class DataMigrationServiceTests
 
         string[] capturedEnvironmentNames = new string[0];
 
-        mockCreateSeedScriptService.CreateSeedScriptFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
+        mockCreateSeedTemplateService.CreateSeedTemplateFile(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Do<string[]>(x => capturedEnvironmentNames = x))
                                             .Returns("Hello there");
         //Act
-        bool result = await Service.CreateSeedScript();
+        bool result = await Service.CreateSeedTemplate();
 
         Assert.True(result);
         Assert.Collection(capturedEnvironmentNames, 

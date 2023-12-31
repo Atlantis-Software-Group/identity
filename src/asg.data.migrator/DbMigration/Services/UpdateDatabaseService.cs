@@ -1,4 +1,5 @@
 ﻿using asg.data.migrator.DbMigration.Interfaces;
+using asg.data.migrator.Shared.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -102,7 +103,7 @@ public class UpdateDatabaseService : IUpdateDatabaseService
 
         IEnumerable<string> appliedSeedRecords = await context.Database.GetSeedScriptsForMigration(migrationName);
 
-        IEnumerable<Type> seedScriptTypes = AssemblyInformation.GetSeedScripts(context.GetType().Name, migrationName);
+        IEnumerable<Type> seedScriptTypes = AssemblyInformation.GetSeedScripts(context.GetType().Name, migrationName, HostEnvironment.EnvironmentName);
         foreach ( Type seedScriptType in seedScriptTypes )
         {            
             string? appliedSeedScriptType = appliedSeedRecords.Where(sr => sr == seedScriptType.Name).SingleOrDefault() ;

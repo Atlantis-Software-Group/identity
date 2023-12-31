@@ -7,6 +7,8 @@ using asg.data.migrator.CreateSeedTemplate.Services;
 using asg.data.migrator.DbMigration.Interfaces;
 using asg.data.migrator.DbMigration.Services;
 using asg.data.migrator.HostedService;
+using asg.data.migrator.Shared.Interfaces;
+using asg.data.migrator.Shared.Services;
 using Duende.IdentityServer.EntityFramework.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

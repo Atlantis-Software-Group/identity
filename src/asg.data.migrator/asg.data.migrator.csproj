@@ -18,6 +18,8 @@
   <ItemGroup>
     <Folder Include="SeedData\Databases\ApplicationDb\" />
     <Folder Include="SeedData\Databases\ConfigurationDb\" />
+    <Folder Include="Shared\" />
+    <Folder Include="Shared\Interfaces\" />
   </ItemGroup>
 
   <PropertyGroup>

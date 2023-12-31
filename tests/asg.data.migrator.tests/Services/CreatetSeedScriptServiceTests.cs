@@ -1,5 +1,6 @@
 ﻿using asg.data.migrator.Constants;
-using asg.data.migrator.CreateSeedScript.Services;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
+using asg.data.migrator.CreateSeedTemplate.Services;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit.Abstractions;
@@ -8,25 +9,25 @@ namespace asg.data.migrator.tests.Services;
 
 public class CreateSeedScriptServiceTests
 {
-    private ILogger<CreateSeedScriptService> mockLogger { get; }
+    private ILogger<CreateSeedTemplateService> mockLogger { get; }
     private IFileProviderService mockFileProviderService { get; }
 
-    private CreateSeedScriptService Service { get; }
+    private CreateSeedTemplateService Service { get; }
     public CreateSeedScriptServiceTests(ITestOutputHelper testOutputHelper)
     {
-        mockLogger = new UnitTestLogger<CreateSeedScriptService>(testOutputHelper);
+        mockLogger = new UnitTestLogger<CreateSeedTemplateService>(testOutputHelper);
         mockFileProviderService = Substitute.For<IFileProviderService>();
 
-        Service = new CreateSeedScriptService(mockLogger, mockFileProviderService);
+        Service = new CreateSeedTemplateService(mockLogger, mockFileProviderService);
     }
 
     [Fact]
-    public async Task CreateSeedScriptFile_True_OnlyMigrationName()
+    public async Task CreateSeedTemplateFile_True_OnlyMigrationName()
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
 
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[0]);
+        string result = await Service.CreateSeedTemplateFile(string.Empty, "random", "Users", "HelloDb", new string[0]);
 
         Assert.Equal(@"using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -52,11 +53,11 @@ public class Random : SeedDataService
     }
 
     [Fact]
-    public async Task CreateSeedScriptFile_True_OneEnvironmentName()
+    public async Task CreateSeedTemplateFile_True_OneEnvironmentName()
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development" });
+        string result = await Service.CreateSeedTemplateFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development" });
 
         Assert.Equal(@"using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -83,11 +84,11 @@ public class Random : SeedDataService
     }
 
     [Fact]
-    public async Task CreateSeedScriptFile_True_MultipleEnvironmentName()
+    public async Task CreateSeedTemplateFile_True_MultipleEnvironmentName()
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(true);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
+        string result = await Service.CreateSeedTemplateFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
 
         Assert.Equal(@"using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -115,13 +116,13 @@ public class Random : SeedDataService
     }
 
     [Fact]
-    public async Task CreateSeedScriptFile_False_FileAlreadyExists()
+    public async Task CreateSeedTemplateFile_False_FileAlreadyExists()
     {
         mockFileProviderService.CreateFile(Arg.Any<string>(), Arg.Any<byte[]>())
                                 .Returns(false);
         
         mockFileProviderService.ErrorMessage.Returns(ErrorMessageConstants.FileAlreadyExists);
-        string result = await Service.CreateSeedScriptFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
+        string result = await Service.CreateSeedTemplateFile(string.Empty, "random", "Users", "HelloDb", new string[] { "Development", "Integration" });
 
         bool HasContent = !string.IsNullOrWhiteSpace(result);
         Assert.False(HasContent);

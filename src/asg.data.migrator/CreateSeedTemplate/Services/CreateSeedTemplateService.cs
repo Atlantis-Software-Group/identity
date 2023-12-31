@@ -3,20 +3,22 @@ using asg.data.migrator.Constants;
 using asg.data.migrator.CreateSeedTemplate.Interfaces;
 using asg.data.migrator.SeedData.Attributes;
 using asg.data.migrator.Services;
+using asg.data.migrator.Shared.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace asg.data.migrator.CreateSeedTemplate.Services;
 
 public class CreateSeedTemplateService : ICreateSeedTemplateService
 {
-    public CreateSeedTemplateService(ILogger<CreateSeedTemplateService> logger, IFileProviderService fileProviderService)
+    public CreateSeedTemplateService(ILogger<CreateSeedTemplateService> logger, IFileProviderService fileProviderService, IAssemblyInformationService assemblyInformationService)
     {
         Logger = logger;
         FileProviderService = fileProviderService;
+        AssemblyInformationService = assemblyInformationService;
         scriptContent = new StringBuilder();
     }
 
-    public async Task<string> CreateSeedScriptFile(string path, string scriptName, string migrationName, string DbContextName, params string[] environmentnames)
+    public async Task<string> CreateSeedTemplateFile(string path, string scriptName, string migrationName, string DbContextName, params string[] environmentnames)
     {
         string namespaceString = $"asg.Data.Migrator.SeedData.Databases.{DbContextName}";
         scriptContent.AppendLine("using Microsoft.Extensions.Configuration;");        
@@ -36,7 +38,7 @@ public class CreateSeedTemplateService : ICreateSeedTemplateService
         byte[] contentBytes = Encoding.UTF8.GetBytes(scriptContent.ToString());
 
         // Check if class already exists
-        bool classAlreadyExists = ClassAlreadyExists(scriptName, namespaceString);
+        bool classAlreadyExists = AssemblyInformationService.ClassExists(scriptName, namespaceString);
         bool scriptCreated = false;
 
         if ( !classAlreadyExists )
@@ -48,19 +50,6 @@ public class CreateSeedTemplateService : ICreateSeedTemplateService
             ErrorMessage = FileProviderService.ErrorMessage;
 
         return scriptCreated ? scriptContent.ToString() : string.Empty;
-    }
-
-    private bool ClassAlreadyExists(string scriptName, string namepsaceString)
-    {
-        Type? type = AppDomain.CurrentDomain.GetAssemblies()
-                                    .SelectMany(da => da.GetTypes())
-                                    .Where(type => type.IsSubclassOf(typeof(SeedDataService)) 
-                                            && !type.IsAbstract 
-                                            && type.Namespace == namepsaceString
-                                            && type.Name == scriptName)
-                                    .FirstOrDefault();
-
-        return type is not null;
     }
 
     private string GetClassTemplate(string scriptName)
@@ -94,6 +83,7 @@ public class CreateSeedTemplateService : ICreateSeedTemplateService
     public string? ErrorMessage { get; set; }
     public ILogger<CreateSeedTemplateService> Logger { get; }
     public IFileProviderService FileProviderService { get; }
+    public IAssemblyInformationService AssemblyInformationService { get; }
 
     StringBuilder scriptContent;
 
