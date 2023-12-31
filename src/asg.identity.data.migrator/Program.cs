@@ -1,5 +1,4 @@
-﻿using System.Text;
-using asg.data.DbContexts;
+﻿using asg.data.DbContexts;
 using asg.dbmigrator;
 using asg.dbmigrator.CommandLineParser;
 using Duende.IdentityServer.EntityFramework.DbContexts;
@@ -24,7 +23,7 @@ public class Program
                 .CreateBootstrapLogger();
 
         Log.Information("Args: {@args}", args);
-        Parser parser = new Parser(args);
+        CommandLineArgParser parser = new CommandLineArgParser(args);
         CreateCommandLineOptions(parser);
 
         ICommandLineArgs parsedArgs = parser.Parse();
@@ -37,20 +36,6 @@ public class Program
 
             string environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Local";
             Log.Information("Environment: {environment}", environment);
-
-            StringBuilder workingDirPath = new StringBuilder();
-            if (Environment.CurrentDirectory.EndsWith("asg.identity.data.migrator"))
-            {
-                workingDirPath.Append(Environment.CurrentDirectory);
-            }
-            else
-            {
-                workingDirPath.Append(Path.Combine(Environment.CurrentDirectory, "asg.identity.data.migrator"));
-            }
-
-            Log.Information("Current Working Directory: {directory}", workingDirPath);
-            builder.UseContentRoot(workingDirPath.ToString());
-
 
             if (parsedArgs.GetValue<bool>("-ef") && string.Equals(environment, "Local", StringComparison.OrdinalIgnoreCase))
                 builder.UseEnvironment("Development");
@@ -146,7 +131,7 @@ public class Program
         return 0;
     }
 
-    private static void CreateCommandLineOptions(Parser parser)
+    private static void CreateCommandLineOptions(CommandLineArgParser parser)
     {
         CommandLineOption<bool> migrateOption = new CommandLineOption<bool>("migrate");
         parser.Add(migrateOption.Name, migrateOption);
@@ -154,7 +139,6 @@ public class Program
         CommandLineOption<bool> efOption = new CommandLineOption<bool>("ef");
         parser.Add(efOption.Name, efOption);
 
-        // createSeedScript
         CommandLineOption<bool> createSeedScriptOption = new CommandLineOption<bool>("createSeedScript");
         parser.Add(createSeedScriptOption.Name, createSeedScriptOption);
 

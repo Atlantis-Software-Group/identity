@@ -1,11 +1,11 @@
 ﻿namespace asg.dbmigrator.CommandLineParser;
 
-public class Parser
+public class CommandLineArgParser
 {
     string? Args { get; set; }
 
     Dictionary<string, CommandLineOption> options = new Dictionary<string, CommandLineOption>();
-    public Parser(string[] args)
+    public CommandLineArgParser(string[] args)
     {
         if ( args is not null )
             Args = string.Join(' ', args);
