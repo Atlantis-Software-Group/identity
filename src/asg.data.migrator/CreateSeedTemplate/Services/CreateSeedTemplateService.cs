@@ -1,18 +1,15 @@
 ﻿using System.Text;
 using asg.data.migrator.Constants;
-using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
 using asg.data.migrator.SeedData.Attributes;
 using asg.data.migrator.Services;
 using Microsoft.Extensions.Logging;
 
-namespace asg.data.migrator.CreateSeedScript.Services;
+namespace asg.data.migrator.CreateSeedTemplate.Services;
 
-[MigrationName(migrationName: "User")]
-[SeedEnvironment(environmentName: "Development")]
-[SeedEnvironment(environmentName: "Integration")]
-public class CreateSeedScriptService : ICreateSeedScriptService
+public class CreateSeedTemplateService : ICreateSeedTemplateService
 {
-    public CreateSeedScriptService(ILogger<CreateSeedScriptService> logger, IFileProviderService fileProviderService)
+    public CreateSeedTemplateService(ILogger<CreateSeedTemplateService> logger, IFileProviderService fileProviderService)
     {
         Logger = logger;
         FileProviderService = fileProviderService;
@@ -95,7 +92,7 @@ public class CreateSeedScriptService : ICreateSeedScriptService
     }
 
     public string? ErrorMessage { get; set; }
-    public ILogger<CreateSeedScriptService> Logger { get; }
+    public ILogger<CreateSeedTemplateService> Logger { get; }
     public IFileProviderService FileProviderService { get; }
 
     StringBuilder scriptContent;

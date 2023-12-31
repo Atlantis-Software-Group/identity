@@ -2,8 +2,8 @@
 using asg.data.DbContexts;
 using asg.data.migrator;
 using asg.data.migrator.CommandLine;
-using asg.data.migrator.CreateSeedScript.Interfaces;
-using asg.data.migrator.CreateSeedScript.Services;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
+using asg.data.migrator.CreateSeedTemplate.Services;
 using asg.data.migrator.DbMigration.Interfaces;
 using asg.data.migrator.DbMigration.Services;
 using asg.data.migrator.HostedService;
@@ -78,7 +78,7 @@ public class Program
             {
                 services.AddHostedService<DatabaseMigrationService>();
                 services.AddScoped<IFileProviderService, FileProviderService>();
-                services.AddScoped<ICreateSeedScriptService, CreateSeedScriptService>();
+                services.AddScoped<ICreateSeedTemplateService, CreateSeedTemplateService>();
                 services.AddScoped<IUpdateDatabaseService, UpdateDatabaseService>();
                 services.AddScoped<IAssemblyInformationService, AssemblyInformationService>();
                 services.AddScoped<ISeeder, Seeder>();

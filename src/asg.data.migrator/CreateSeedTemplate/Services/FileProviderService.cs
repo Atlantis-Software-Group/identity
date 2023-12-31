@@ -1,7 +1,8 @@
 ﻿using asg.data.migrator.Constants;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace asg.data.migrator;
+namespace asg.data.migrator.CreateSeedTemplate.Services;
 
 public class FileProviderService : IFileProviderService
 {

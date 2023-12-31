@@ -1,4 +1,4 @@
-﻿namespace asg.data.migrator;
+﻿namespace asg.data.migrator.CreateSeedTemplate.Interfaces;
 
 public interface IFileProviderService
 {

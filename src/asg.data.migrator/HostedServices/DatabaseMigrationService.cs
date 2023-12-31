@@ -1,6 +1,6 @@
 ﻿using asg.data.DbContexts;
 using asg.data.migrator.Constants;
-using asg.data.migrator.CreateSeedScript.Interfaces;
+using asg.data.migrator.CreateSeedTemplate.Interfaces;
 using asg.data.migrator.DbMigration.Interfaces;
 using Duende.IdentityServer.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -89,11 +89,11 @@ public class DatabaseMigrationService : IHostedService
         string[] environmentNames = environmentNameArgs.ToArray();
 
         using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
-        CreateSeedScriptService = scope.ServiceProvider.GetRequiredService<ICreateSeedScriptService>();
-        string scriptCreated = await CreateSeedScriptService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
+        CreateSeedTemplateService = scope.ServiceProvider.GetRequiredService<ICreateSeedTemplateService>();
+        string scriptCreated = await CreateSeedTemplateService.CreateSeedScriptFile(scriptFullPath, scriptName, migrationName, DbContextName, environmentNames);
 
         if ( string.IsNullOrWhiteSpace(scriptCreated) )
-            ErrorMessage = CreateSeedScriptService.ErrorMessage;
+            ErrorMessage = CreateSeedTemplateService.ErrorMessage;
 
         return !string.IsNullOrWhiteSpace(scriptCreated);
     }
@@ -148,7 +148,7 @@ public class DatabaseMigrationService : IHostedService
     public IConfiguration Configuration { get; }
     public IHostEnvironment HostEnvironment { get; }
     public ICommandLineArgs CommandLineArgs { get; }
-    public ICreateSeedScriptService? CreateSeedScriptService { get; set; }
+    public ICreateSeedTemplateService? CreateSeedTemplateService { get; set; }
     public IUpdateDatabaseService? UpdateDatabaseService { get; set; }
 
     // initialize the application
