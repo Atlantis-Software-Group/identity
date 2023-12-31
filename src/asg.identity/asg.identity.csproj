@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\asg.data\asg.data.csproj" />
+	  <ProjectReference Include="..\asg.identity.data\asg.identity.data.csproj" />
 	</ItemGroup>
 
 </Project>

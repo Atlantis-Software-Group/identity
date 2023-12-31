@@ -5,11 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity", "src\asg.identity\asg.identity.csproj", "{A915A6BD-9F6C-458D-B3A1-13E4D15A07E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data", "src\asg.data\asg.data.csproj", "{944B75C2-DF18-423D-9BBA-4255288FFD89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data", "src\asg.identity.data\asg.identity.data.csproj", "{944B75C2-DF18-423D-9BBA-4255288FFD89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data.migrator", "src\asg.data.migrator\asg.data.migrator.csproj", "{4A2D8671-E96B-4912-AFE3-24A2092DE862}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data.migrator", "src\asg.identity.data.migrator\asg.identity.data.migrator.csproj", "{4A2D8671-E96B-4912-AFE3-24A2092DE862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.data.migrator.tests", "tests\asg.data.migrator.tests\asg.data.migrator.tests.csproj", "{BF4D1716-58EA-453E-9057-9601F36AD116}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data.migrator.tests", "tests\asg.identity.data.migrator.tests\asg.identity.data.migrator.tests.csproj", "{BF4D1716-58EA-453E-9057-9601F36AD116}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.dbmigrator", "src\asg.dbmigrator\asg.dbmigrator.csproj", "{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BF4D1716-58EA-453E-9057-9601F36AD116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF4D1716-58EA-453E-9057-9601F36AD116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF4D1716-58EA-453E-9057-9601F36AD116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

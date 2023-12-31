@@ -7,7 +7,7 @@
 			"command": "dotnet",
 			"args": [
 				"build",
-				"${workspaceFolder}/src/asg.data.migrator"
+				"${workspaceFolder}/src/asg.identity.data.migrator"
 			],
 			"problemMatcher": "$msCompile"
 		}

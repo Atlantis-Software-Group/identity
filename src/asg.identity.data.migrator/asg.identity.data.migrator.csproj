@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\asg.identity.data\asg.identity.data.csproj" />
+    <ProjectReference Include="..\asg.dbmigrator\asg.dbmigrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.3.6" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
