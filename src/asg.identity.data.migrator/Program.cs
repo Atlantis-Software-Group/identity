@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Exceptions;
+using asg.identity.data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace asg.identity.data.migrator;
 
@@ -59,6 +61,9 @@ public class Program
 
             builder.ConfigureServices((ctx, services) =>
             {
+                services.AddIdentity<ApplicationUser, IdentityRole>()
+                        .AddEntityFrameworkStores<ApplicationDbContext>();
+                        
                 services.AddDbMigratorHostedService((options) => {
                     options.ParsedArgs = parsedArgs;
                     options.DbContextTypes = new Type[] {
