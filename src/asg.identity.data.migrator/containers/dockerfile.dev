@@ -1,0 +1,27 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dev
+
+# Copy Certs
+WORKDIR /usr/local/share/ca-certificates
+COPY ./simple-budget/certs/ca ./
+
+#update the certificates for the container
+RUN update-ca-certificates 
+
+WORKDIR /https
+COPY ./simple-budget/certs/https ./
+
+# Copy Packages to /app/packages
+WORKDIR /app/packages
+COPY ./packages ./
+
+# Add NuGet source: Local
+RUN dotnet nuget add source /app/packages -n local
+
+# Copy Main Project and dependencies
+WORKDIR /app/src
+COPY ./identity/src/asg.identity.data.migrator ./asg.identity.data.migrator
+COPY ./identity/src/asg.identity.data ./asg.identity.data
+
+# Build package
+WORKDIR /app/src/asg.identity.data.migrator
+RUN dotnet build ./asg.identity.data.migrator.csproj
