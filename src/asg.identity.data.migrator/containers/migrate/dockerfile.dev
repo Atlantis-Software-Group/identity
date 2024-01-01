@@ -1,0 +1,3 @@
+FROM simplebudget/identity/dbmigrator:0.0.17 as base 
+WORKDIR /app/src/asg.identity.data.migrator
+ENTRYPOINT [ "dotnet", "./bin/Debug/net7.0/asg.identity.data.migrator.dll", "-migrate" ]
