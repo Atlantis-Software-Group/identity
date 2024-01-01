@@ -9,10 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data", "src\as
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data.migrator", "src\asg.identity.data.migrator\asg.identity.data.migrator.csproj", "{4A2D8671-E96B-4912-AFE3-24A2092DE862}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.identity.data.migrator.tests", "tests\asg.identity.data.migrator.tests\asg.identity.data.migrator.tests.csproj", "{BF4D1716-58EA-453E-9057-9601F36AD116}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asg.dbmigrator", "src\asg.dbmigrator\asg.dbmigrator.csproj", "{E930E1E2-5830-42D0-8DF0-9F6FBDC42B8D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

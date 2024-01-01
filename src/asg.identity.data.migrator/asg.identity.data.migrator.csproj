@@ -2,10 +2,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asg.identity.data\asg.identity.data.csproj" />
-    <ProjectReference Include="..\asg.dbmigrator\asg.dbmigrator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    		<PackageReference Include="asg.dbmigrator" Version="1.0.0" />
     		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="6.3.6" />
   </ItemGroup>
 

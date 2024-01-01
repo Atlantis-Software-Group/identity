@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using asg.data.Models;
+using asg.identity.data.Models;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;

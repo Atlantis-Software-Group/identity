@@ -1,8 +1,8 @@
-﻿using asg.data.Models;
+﻿using asg.identity.data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace asg.data.DbContexts;
+namespace asg.identity.data.DbContexts;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
