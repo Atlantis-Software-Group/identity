@@ -6,7 +6,7 @@
             "request": "launch",
             "preLaunchTask": "build migrator",
             "program": "${workspaceFolder}/src/asg.identity.data.migrator/bin/Debug/net7.0/asg.identity.data.migrator.dll",
-            "args": ["-migrate", "-createSeedScript", "-scriptName Configuration", "-dbContextName ConfigurationDb", "-migrationName Configuration", "-environmentNames Development Local"],
+            "args": ["-migrate", "-createSeedScript", "-scriptName AddTestUsers", "-dbContextName ApplicationDb", "-migrationName Users", "-environmentNames Development Local"],
             "cwd": "${workspaceFolder}/src/asg.identity.data.migrator",
             "stopAtEntry": false,
             "console": "internalConsole",
@@ -37,9 +37,9 @@
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
-            "processName": "asg.identity",
+            "processId": "${command:pickRemoteDockerProcess}",
             "sourceFileMap": {
-                "/app/src": "${workspaceFolder}/src/asg.identity"
+                "/app/src/asg.identity": "${workspaceFolder}/src/asg.identity"
             }
         },
         {
@@ -49,7 +49,7 @@
             "platform": "netCore",
             "processName": "asg.data.migrator",
             "sourceFileMap": {
-                "/app/src/asg.data.migrator": "${workspaceFolder}/src/asg.data.migrator"
+                "/app/src/asg.identity.data.migrator": "${workspaceFolder}/src/asg.identity.data.migrator"
             }
         }
     ]

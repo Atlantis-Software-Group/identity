@@ -26,4 +26,4 @@ COPY ./identity/src/asg.identity.data ./asg.identity.data
 WORKDIR /app/src/asg.identity
 RUN dotnet build ./asg.identity.csproj
 
-ENTRYPOINT [ "dotnet", "watch", "./bin/Debug/net7.0/asg.identity.dll" ]
+ENTRYPOINT [ "dotnet", "watch", "run", "./bin/Debug/net7.0/asg.identity.dll" ]

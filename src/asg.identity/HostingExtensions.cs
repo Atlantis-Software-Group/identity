@@ -15,12 +15,15 @@ namespace asg.identity
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddRazorPages();
-            builder.Services.AddHealthChecks();
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddHealthChecks();            
+
+            var ApplicationDbConnectionString = builder.Configuration.GetConnectionString("ApplicationDb");
+            var ConfigurationDbConnectionString = builder.Configuration.GetConnectionString("ConfigurationDb");
+            var OperationalDbConnectionString = builder.Configuration.GetConnectionString("OperationalDb");
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(ApplicationDbConnectionString);
             });
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -43,7 +46,7 @@ namespace asg.identity
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                        b.UseSqlServer(ConfigurationDbConnectionString);
                 })
                 // this is something you will want in production to reduce load on and requests to the DB
                 //.AddConfigurationStoreCache()
@@ -52,7 +55,7 @@ namespace asg.identity
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+                        b.UseSqlServer(OperationalDbConnectionString);
                 })
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddProfileService<ASGIdentityProfileService>();
