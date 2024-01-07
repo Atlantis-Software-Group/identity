@@ -33,16 +33,6 @@
             }
         },
         {
-            "name": "Identity",
-            "type": "docker",
-            "request": "attach",
-            "platform": "netCore",
-            "processId": "${command:pickRemoteDockerProcess}",
-            "sourceFileMap": {
-                "/app/src/asg.identity": "${workspaceFolder}/src/asg.identity"
-            }
-        },
-        {
             "name": "DbMigrator",
             "type": "docker",
             "request": "attach",
@@ -50,6 +40,16 @@
             "processName": "asg.data.migrator",
             "sourceFileMap": {
                 "/app/src/asg.identity.data.migrator": "${workspaceFolder}/src/asg.identity.data.migrator"
+            }
+        },
+        {
+            "name": "Identity",
+            "type": "docker",
+            "request": "attach",
+            "platform": "netCore",
+            "processId": "${command:pickRemoteDockerProcess}",
+            "sourceFileMap": {
+                "/app/src/asg.identity": "${workspaceFolder}/src/asg.identity"
             }
         }
     ]
